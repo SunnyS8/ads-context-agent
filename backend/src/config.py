@@ -38,6 +38,16 @@ class Settings(BaseSettings):
     # Режим
     dry_run: bool = Field(default=True, alias="DRY_RUN")
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
+    allowed_origins: str = Field(
+        default="http://localhost:3000", alias="ALLOWED_ORIGINS"
+    )
+
+    @property
+    def cors_origins(self) -> list[str]:
+        """Список origins для CORS из строки через запятую."""
+        return [
+            o.strip() for o in self.allowed_origins.split(",") if o.strip()
+        ]
 
     model_config = {"env_file": str(PROJECT_ROOT / ".env"), "extra": "ignore"}
 

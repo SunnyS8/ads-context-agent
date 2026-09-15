@@ -1,11 +1,12 @@
-import httpx
+﻿import httpx
+import os
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 
 router = Router()
 
-BACKEND_URL = "http://localhost:8000/api/v1"
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000/api/v1")
 
 
 @router.message(Command("alerts"))
