@@ -1,5 +1,6 @@
 import "@/app/globals.css";
 import type { Metadata } from "next";
+import { Sidebar } from "@/components/layout/sidebar";
 
 export const metadata: Metadata = {
   title: "Агент контекстной рекламы",
@@ -14,7 +15,10 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className="min-h-screen bg-gray-50 text-gray-900 antialiased">
-        {children}
+        <div className="flex min-h-screen">
+          <Sidebar />
+          <main className="flex-1 overflow-y-auto">{children}</main>
+        </div>
       </body>
     </html>
   );
