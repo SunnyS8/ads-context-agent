@@ -1,7 +1,9 @@
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+from src.models.enums import RecommendationStatus
 
 
 class RecommendationBase(BaseModel):
@@ -15,6 +17,14 @@ class RecommendationBase(BaseModel):
     status: Literal[
         "pending", "approved", "rejected", "applied", "expired"
     ] = "pending"
+
+    @field_validator("status", mode="before")
+    @classmethod
+    def coerce_status(cls, value):
+        """Сериализует ORM-перечисление в строку."""
+        if isinstance(value, RecommendationStatus):
+            return value.value
+        return value
 
 
 class RecommendationRead(RecommendationBase):

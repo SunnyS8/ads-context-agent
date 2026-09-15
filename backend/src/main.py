@@ -1,8 +1,20 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.config import settings
 from src.api.routes import campaigns, statistics, recommendations, creatives
+from src.scheduler.jobs import create_scheduler
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    """Старт и остановка планировщика фоновых задач."""
+    scheduler = create_scheduler()
+    scheduler.start()
+    yield
+    scheduler.shutdown(wait=False)
 
 
 def create_app() -> FastAPI:
@@ -11,6 +23,7 @@ def create_app() -> FastAPI:
         title="Агент контекстной рекламы",
         version="0.1.0",
         description="API для автоматизации контекстной рекламы (eLama, VK Ads)",
+        lifespan=lifespan,
     )
 
     app.add_middleware(

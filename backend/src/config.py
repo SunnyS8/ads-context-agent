@@ -1,5 +1,9 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings
 from pydantic import Field
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 class Settings(BaseSettings):
@@ -35,7 +39,7 @@ class Settings(BaseSettings):
     dry_run: bool = Field(default=True, alias="DRY_RUN")
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
 
-    model_config = {"env_file": ".env", "extra": "ignore"}
+    model_config = {"env_file": str(PROJECT_ROOT / ".env"), "extra": "ignore"}
 
 
 settings = Settings()
